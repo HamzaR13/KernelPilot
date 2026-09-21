@@ -37,7 +37,7 @@ __global__ void swiglu_kernel(
 }
 
 
-int main() {
+int main(int argc, char** argv) {
 
     const int N = 1 << 22; // ~4 million elements
     const size_t bytes = N * sizeof(float);
@@ -95,7 +95,12 @@ int main() {
     // Kernel configuration
     // ----------------------------------
 
-    const int threads_per_block = 256;
+    int threads_per_block = 256;
+
+    if (argc > 1) {
+        threads_per_block = std::atoi(argv[1]);
+    }
+
     const int blocks =
         (N + threads_per_block - 1) / threads_per_block;
 
